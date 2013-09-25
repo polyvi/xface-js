@@ -62,7 +62,7 @@ module.exports = {
         });
 
         //load in our modules
-        var testLibName = _path.join(__dirname, '..', 'pkg', 'cordova.test.js')
+        var testLibName = _path.join(__dirname, '..', 'pkg', 'xface.test.js')
         var testLib     = fs.readFileSync(testLibName, 'utf8')
         try {
             eval(testLib);

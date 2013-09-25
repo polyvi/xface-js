@@ -87,13 +87,13 @@ packager.generate = function(platform, useWindowsLineEndings, callback) {
             fs.mkdirSync('pkg/debug');
         }
 
-        outFile = path.join('pkg', 'cordova.' + platform + '.js');
+        outFile = path.join('pkg', 'xface.' + platform + '.js');
         fs.writeFileSync(outFile, libraryRelease, 'utf8');
         
-        outFile = path.join('pkg', 'debug', 'cordova.' + platform + '-debug.js');
+        outFile = path.join('pkg', 'debug', 'xface.' + platform + '-debug.js');
         fs.writeFileSync(outFile, libraryDebug, 'utf8');
         
-        console.log('generated cordova.' + platform + '.js @ ' + commitId + ' in ' + time + 'ms');
+        console.log('generated xface.' + platform + '.js @ ' + commitId + ' in ' + time + 'ms');
         callback();
     });
 }
@@ -109,6 +109,9 @@ packager.bundle = function(platform, debug, commitId) {
     if (platform === 'test') {
         copyProps(modules, collectFiles(path.join('lib', 'android', 'android'), 'android/'));
     }
+
+    modules['xFace'] = 'lib/xFace.js'
+    copyProps(modules, collectFiles(path.join('lib', platform)));
 
     var output = [];
 	
@@ -138,6 +141,7 @@ packager.bundle = function(platform, debug, commitId) {
     }
 
     output.push("window.cordova = require('cordova');")
+    output.push("window.xFace = require('xFace');")
 
     // write final scripts
     if (!scripts['bootstrap']) {
@@ -218,7 +222,11 @@ function writeModule(oFile, fileName, moduleId, debug) {
     contents = '\n' + stripHeader(contents, fileName) + '\n'
 
 	// Windows fix, '\' is an escape, but defining requires '/' -jm
-    moduleId = path.join('cordova', moduleId).split("\\").join("/");
+	if(/privateModule$/.test(moduleId)){
+        moduleId = path.join('xFace', moduleId).split("\\").join("/");
+    }else if(!/xFace$/.test(moduleId)){
+        moduleId = path.join('cordova', moduleId).split("\\").join("/");
+    }
     
     var signature = 'function(require, exports, module)';
     
