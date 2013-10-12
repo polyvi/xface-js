@@ -9,7 +9,7 @@
  *
  *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to 
+ * Unless required by applicable law or agreed to
  * software distributed under the License is distr
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS
  * KIND, either express or implied.  See the Licen
@@ -78,7 +78,7 @@ packager.generate = function(platform, useWindowsLineEndings, callback) {
             libraryRelease = "\ufeff" + libraryRelease.split(/\r?\n/).join("\r\n");
         }
         var libraryDebug   = packager.bundle(platform, true, commitId);
-        
+
         time = new Date().valueOf() - time;
         if (!fs.existsSync('pkg')) {
             fs.mkdirSync('pkg');
@@ -89,10 +89,10 @@ packager.generate = function(platform, useWindowsLineEndings, callback) {
 
         outFile = path.join('pkg', 'xface.' + platform + '.js');
         fs.writeFileSync(outFile, libraryRelease, 'utf8');
-        
+
         outFile = path.join('pkg', 'debug', 'xface.' + platform + '-debug.js');
         fs.writeFileSync(outFile, libraryDebug, 'utf8');
-        
+
         console.log('generated xface.' + platform + '.js @ ' + commitId + ' in ' + time + 'ms');
         callback();
     });
@@ -102,7 +102,7 @@ packager.generate = function(platform, useWindowsLineEndings, callback) {
 packager.bundle = function(platform, debug, commitId) {
     var modules = collectFiles('lib/common')
     var scripts = collectFiles('lib/scripts')
-    
+
     modules[''] = 'lib/cordova.js'
     copyProps(modules, collectFiles(path.join('lib', platform)));
 
@@ -114,7 +114,7 @@ packager.bundle = function(platform, debug, commitId) {
     copyProps(modules, collectFiles(path.join('lib', platform)));
 
     var output = [];
-	
+
     output.push("// Platform: " + platform);
     output.push("// "  + commitId);
 
@@ -127,16 +127,16 @@ packager.bundle = function(platform, debug, commitId) {
     if (!scripts['require']) {
         throw new Error("didn't find a script for 'require'")
     }
-    
+
     writeScript(output, scripts['require'], debug)
 
     // write modules
     var moduleIds = Object.keys(modules)
     moduleIds.sort()
-    
+
     for (var i=0; i<moduleIds.length; i++) {
         var moduleId = moduleIds[i]
-        
+
         writeModule(output, modules[moduleId], moduleId, debug)
     }
 
@@ -147,9 +147,9 @@ packager.bundle = function(platform, debug, commitId) {
     if (!scripts['bootstrap']) {
         throw new Error("didn't find a script for 'bootstrap'")
     }
-    
+
     writeScript(output, scripts['bootstrap'], debug)
-    
+
     var bootstrapPlatform = 'bootstrap-' + platform
     if (scripts[bootstrapPlatform]) {
         writeScript(output, scripts[bootstrapPlatform], debug)
@@ -167,7 +167,7 @@ function collectFile(dir, id, entry) {
     if (!id) id = ''
     var moduleId = path.join(id,  entry)
     var fileName = path.join(dir, entry)
-    
+
     var stat = fs.statSync(fileName)
 
     var result = {};
@@ -181,12 +181,12 @@ function collectFile(dir, id, entry) {
 function collectFiles(dir, id) {
     if (!id) id = ''
 
-    var result = {}    
+    var result = {}
     var entries = fs.readdirSync(dir)
 
     entries = entries.filter(function(entry) {
         if (entry.match(/\.js$/)) return true
-        
+
         var stat = fs.statSync(path.join(dir, entry))
         if (stat.isDirectory())  return true
     })
@@ -194,7 +194,7 @@ function collectFiles(dir, id) {
     entries.forEach(function(entry) {
         var moduleId = path.join(id, entry)
         var fileName = path.join(dir, entry)
-        
+
         var stat = fs.statSync(fileName)
         if (stat.isDirectory()) {
             copyProps(result, collectFiles(fileName, moduleId))
@@ -222,17 +222,17 @@ function writeModule(oFile, fileName, moduleId, debug) {
     contents = '\n' + stripHeader(contents, fileName) + '\n'
 
 	// Windows fix, '\' is an escape, but defining requires '/' -jm
-	if(/privateModule$/.test(moduleId)){
+	if((/privateModule$/.test(moduleId)) || (/workspace$/.test(moduleId))){
         moduleId = path.join('xFace', moduleId).split("\\").join("/");
     }else if(!/xFace$/.test(moduleId)){
         moduleId = path.join('cordova', moduleId).split("\\").join("/");
     }
-    
+
     var signature = 'function(require, exports, module)';
-    
+
     contents = 'define("' + moduleId + '", ' + signature + ' {' + contents + '});\n'
 
-    writeContents(oFile, fileName, contents, debug)    
+    writeContents(oFile, fileName, contents, debug)
 }
 
 //------------------------------------------------------------------------------
@@ -242,20 +242,20 @@ function getContents(file) {
 
 //------------------------------------------------------------------------------
 function writeContents(oFile, fileName, contents, debug) {
-    
+
     if (debug) {
         contents += '\n//@ sourceURL=' + fileName
-        
+
         contents = 'eval(' + JSON.stringify(contents) + ')'
-        
+
         // this bit makes it easier to identify modules
         // with syntax errors in them
         var handler = 'console.log("exception: in ' + fileName + ': " + e);'
         handler += 'console.log(e.stack);'
-        
+
         contents = 'try {' + contents + '} catch(e) {' + handler + '}'
     }
-    
+
     else {
         contents = '// file: ' + fileName.split("\\").join("/") + '\n' + contents;
     }
@@ -272,10 +272,10 @@ function getModuleId(fileName) {
 function copyProps(target, source) {
     for (var key in source) {
         if (!source.hasOwnProperty(key)) continue
-        
+
         target[key] = source[key]
     }
-    
+
     return target
 }
 //-----------------------------------------------------------------------------
@@ -291,9 +291,9 @@ function stripHeader(contents, fileName) {
             break;
         }
         else {
-        	console.log("WARNING: file name " + fileName + " is missing the license header");
-        	break;
-    	}
+            console.log("WARNING: file name " + fileName + " is missing the license header");
+            break;
+        }
     }
     return ls.join('\n');
 }
