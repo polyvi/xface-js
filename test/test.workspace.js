@@ -35,6 +35,7 @@ describe('workspace', function () {
         expect(typeof workspace.toURL).toBe('function');
         expect(typeof workspace.toPath).toBe('function');
         expect(typeof workspace.isAbsolutePath).toBe('function');
+        expect(typeof workspace.buildPath).toBe('function');
         expect(typeof workspace.resolvePath).toBe('function');
         expect(typeof workspace.checkWorkspace).toBe('function');
     });
@@ -94,37 +95,43 @@ describe('workspace', function () {
          expect(workspace.toPath('file:///user/apps/appId/workspace')).toBe('/user/apps/appId/workspace');
     });
 
-    it("workspace.spec.9 test checkWorkspace with true results", function() {
-         var basePath = '/user/apps/appId/workspace';
-         expect(workspace.checkWorkspace(basePath, '')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, '  ')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, 'a/d')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, 'a/b/css/../../d')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, 'a/b/c.ss/../../d')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, 'a/b/css/../..')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, 'ad/c.ss/../..')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace/download')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace/download/../data')).toBe(true);
-         basePath = 'user/apps/appId/workspace/';
-         expect(workspace.checkWorkspace(basePath, 'a/b/c.ss/../../d')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, 'a/b/css/../..')).toBe(true);
-         expect(workspace.checkWorkspace(basePath, 'ad/c.ss/../..')).toBe(true);
+    it("workspace.spec.9 test buildPath", function() {
+         expect(workspace.buildPath('/user/apps/appId/workspace', 'download')).toBe('/user/apps/appId/workspace/download');
+         expect(workspace.buildPath('/user/apps/appId/workspace/', 'download')).toBe('/user/apps/appId/workspace/download');
+         expect(workspace.buildPath('/user/apps/appId/workspace/', '/download')).toBe('/user/apps/appId/workspace//download');
     });
 
-    it("workspace.spec.10 test checkWorkspace with false results", function() {
+    it("workspace.spec.10 test checkWorkspace with true results", function() {
          var basePath = '/user/apps/appId/workspace';
-         expect(workspace.checkWorkspace(basePath, 'a/bss/../../../')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '../../../')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '../../a/bss/../../')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, 'd/../../a/bss/../../')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '../a.c/../')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '../e/ad/c.ss/')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '/user/apps/')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '/a/b/css/../../d')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '\\a/b/css/../../d')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '/user/apps2/appId/workspace')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace/../')).toBe(false);
-         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace/download/../../data')).toBe(false);
+         expect(workspace.checkWorkspace(basePath, '')).toBe('/user/apps/appId/workspace/');
+         expect(workspace.checkWorkspace(basePath, '  ')).toBe('/user/apps/appId/workspace/');
+         expect(workspace.checkWorkspace(basePath, 'a/d')).toBe('/user/apps/appId/workspace/a/d');
+         expect(workspace.checkWorkspace(basePath, 'a/b/css/../../d')).toBe('/user/apps/appId/workspace/a/d');
+         expect(workspace.checkWorkspace(basePath, 'a/b/c.ss/../../d')).toBe('/user/apps/appId/workspace/a/d');
+         expect(workspace.checkWorkspace(basePath, 'a/b/css/../..')).toBe('/user/apps/appId/workspace/a/');
+         expect(workspace.checkWorkspace(basePath, 'ad/c.ss/../..')).toBe('/user/apps/appId/workspace/');
+         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace')).toBe('/user/apps/appId/workspace');
+         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace/download')).toBe('/user/apps/appId/workspace/download');
+         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace/download/../data')).toBe('/user/apps/appId/workspace/data');
+         basePath = 'user/apps/appId/workspace/';
+         expect(workspace.checkWorkspace(basePath, 'a/b/c.ss/../../d')).toBe('user/apps/appId/workspace/a/d');
+         expect(workspace.checkWorkspace(basePath, 'a/b/css/../..')).toBe('user/apps/appId/workspace/a/');
+         expect(workspace.checkWorkspace(basePath, 'ad/c.ss/../..')).toBe('user/apps/appId/workspace/');
+    });
+
+    it("workspace.spec.11 test checkWorkspace with false results", function() {
+         var basePath = '/user/apps/appId/workspace';
+         expect(workspace.checkWorkspace(basePath, 'a/bss/../../../')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '../../../')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '../../a/bss/../../')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, 'd/../../a/bss/../../')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '../a.c/../')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '../e/ad/c.ss/')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '/user/apps/')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '/a/b/css/../../d')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '\\a/b/css/../../d')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '/user/apps2/appId/workspace')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace/../')).toBe(null);
+         expect(workspace.checkWorkspace(basePath, '/user/apps/appId/workspace/download/../../data')).toBe(null);
     });
 });
