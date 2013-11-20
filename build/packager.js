@@ -236,7 +236,18 @@ function writeModule(oFile, fileName, moduleId, debug) {
 }
 
 //------------------------------------------------------------------------------
+var symbolinks = [
+    "lib/test/androidexec.js",
+    'lib/test/iosexec.js'
+];
+
 function getContents(file) {
+    file = file.split("\\").join("/");
+    if (-1 != symbolinks.indexOf(file)) {
+        linkPath = fs.readFileSync(file, 'utf8')
+        file = require('path').resolve(path.dirname(file), linkPath);
+     }
+
     return fs.readFileSync(file, 'utf8');
 }
 
