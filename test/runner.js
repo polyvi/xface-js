@@ -48,7 +48,7 @@ module.exports = {
             jsdom, document, window;
 
         try {
-            jsdom = require("jsdom").jsdom;
+            jsdom = require("jsdom-nogyp").jsdom;
             document = jsdom(null, null, { url: 'http://jsdomtest.info/a?b#c' });
             window = document.createWindow();
         } catch (e) {
