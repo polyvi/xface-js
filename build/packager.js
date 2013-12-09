@@ -222,7 +222,7 @@ function writeModule(oFile, fileName, moduleId, debug) {
     contents = '\n' + stripHeader(contents, fileName) + '\n'
 
 	// Windows fix, '\' is an escape, but defining requires '/' -jm
-	if((/privateModule$/.test(moduleId)) || (/workspace$/.test(moduleId))){
+	if((/privateModule$/.test(moduleId)) || (/workspace$/.test(moduleId)) || (/xapp$/.test(moduleId))){
         moduleId = path.join('xFace', moduleId).split("\\").join("/");
     }else if(!/xFace$/.test(moduleId)){
         moduleId = path.join('cordova', moduleId).split("\\").join("/");
