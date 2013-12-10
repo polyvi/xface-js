@@ -243,7 +243,7 @@ var symbolinks = [
 
 function getContents(file) {
     file = file.split("\\").join("/");
-    if (-1 != symbolinks.indexOf(file)) {
+    if (process.platform.slice(0, 3) == 'win' && -1 != symbolinks.indexOf(file)) {
         linkPath = fs.readFileSync(file, 'utf8')
         file = require('path').resolve(path.dirname(file), linkPath);
      }
