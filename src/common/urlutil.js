@@ -19,14 +19,14 @@
  *
 */
 
-var urlutil = exports;
-var anchorEl = document.createElement('a');
 
 /**
  * For already absolute URLs, returns what is passed in.
  * For relative URLs, converts them to absolute ones.
  */
-urlutil.makeAbsolute = function(url) {
+exports.makeAbsolute = function makeAbsolute(url) {
+    var anchorEl = document.createElement('a');
     anchorEl.href = url;
     return anchorEl.href;
 };
+
