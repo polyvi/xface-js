@@ -64,7 +64,7 @@ function root(req, res) {
 
 // connect router defn
 function routes(app) {
-    app.get('/cordova.test.js', cordovajs);
+    app.get('/xface.test.js', cordovajs);
     app.get('/', root)
 }
 

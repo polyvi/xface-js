@@ -42,13 +42,13 @@ module.exports = function generate(platform, useWindowsLineEndings, callback) {
             fs.mkdirSync('pkg/debug');
         }
 
-        outFile = path.join('pkg', 'cordova.' + platform + '.js');
+        outFile = path.join('pkg', 'xface.' + platform + '.js');
         fs.writeFileSync(outFile, libraryRelease, 'utf8');
         
-        outFile = path.join('pkg', 'debug', 'cordova.' + platform + '-debug.js');
+        outFile = path.join('pkg', 'debug', 'xface.' + platform + '-debug.js');
         fs.writeFileSync(outFile, libraryDebug, 'utf8');
         
-        console.log('generated cordova.' + platform + '.js @ ' + commitId + ' in ' + time + 'ms');
+        console.log('generated xface.' + platform + '.js @ ' + commitId + ' in ' + time + 'ms');
         callback();
     });
 }

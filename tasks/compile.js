@@ -19,7 +19,7 @@
 var generate = require('./lib/packager');
 
 module.exports = function(grunt) {
-    grunt.registerMultiTask('compile', 'Packages cordova.js', function() {
+    grunt.registerMultiTask('compile', 'Packages xface.js', function() {
 
         var done = this.async();
         var platformName = this.target;
