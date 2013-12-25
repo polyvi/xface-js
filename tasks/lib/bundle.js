@@ -37,6 +37,9 @@ module.exports = function bundle(platform, debug, commitId) {
         var testFilesPath = path.join('src', 'android', 'android');
         copyProps(modules, collectFiles(testFilesPath, 'android/'));
     }
+    
+    modules['xFace'] = 'src/xFace.js'
+    copyProps(modules, collectFiles(path.join('src', platform)));
 
     var output = [];
 	
@@ -66,6 +69,7 @@ module.exports = function bundle(platform, debug, commitId) {
     }
 
     output.push("window.cordova = require('cordova');")
+    output.push("window.xFace = require('xFace');")
 
     // write final scripts
     if (!scripts['bootstrap']) {

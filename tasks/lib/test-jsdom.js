@@ -29,7 +29,7 @@ var testLibName      = path.join(__dirname, '..', '..', 'pkg', 'xface.test.js')
 var testLib          = fs.readFileSync(testLibName, 'utf8')
 
 try {
-    jsdom    = require("jsdom").jsdom;
+    jsdom    = require("jsdom-nogyp").jsdom;
     document = jsdom(null, null, { url: 'http://jsdomtest.info/a?b#c' });
     window   = document.createWindow();
 } 
