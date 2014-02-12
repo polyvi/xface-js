@@ -38,7 +38,7 @@ module.exports = function(grunt) {
             options: {
                 jshintrc: '.jshintrc',
             },
-            src: ['src/**/*.js', '!src/test/androidexec.js', '!src/test/iosexec.js']
+            src: ['src/**/*.js']
         },
     });
 
@@ -52,5 +52,6 @@ module.exports = function(grunt) {
     // defaults
     grunt.registerTask('default', ['build', 'test']);
     grunt.registerTask('build', ['compile', 'jshint', 'whitespace-check']);
-    grunt.registerTask('test', ['_test']);
+    grunt.registerTask('test', ['compile', '_test']);
+    grunt.registerTask('btest', ['compile', '_btest']);
 };
