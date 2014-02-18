@@ -24,7 +24,6 @@
  */
 var channel = require('cordova/channel');
 var currentAppId = null;        //当前应用ID
-var currentAppWorkspace = null; //当前应用工作空间
 var appData = null;             //传递给应用的启动参数
 
 var privateModule = function() {
@@ -35,17 +34,12 @@ var privateModule = function() {
  */
 privateModule.prototype.initPrivateData = function(initData) {
     currentAppId = initData[0];
-    currentAppWorkspace = initData[1];
-    appData = initData[2];
+    appData = initData[1];
     channel.onPrivateDataReady.fire();
 };
 
 privateModule.prototype.appId = function() {
     return currentAppId;
-};
-
-privateModule.prototype.appWorkspace = function() {
-    return currentAppWorkspace;
 };
 
 privateModule.prototype.appData = function() {
