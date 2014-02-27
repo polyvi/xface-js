@@ -29,7 +29,7 @@ describe('pluginloader', function() {
         injectScript = spyOn(pluginloader, 'injectScript');
         var el = document.createElement('script');
         el.setAttribute('type', 'foo');
-        el.src = 'foo/cordova.js?bar';
+        el.src = 'foo/xface.js?bar';
         document.body.appendChild(el);
         cdvScript = el;
         done = false;
