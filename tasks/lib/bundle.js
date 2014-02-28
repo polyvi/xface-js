@@ -84,7 +84,7 @@ module.exports = function bundle(platform, debug, commitId) {
     }
 
     // write trailer
-    output.push('})();')
+    output.push('})();\n')
 
     return output.join('\n')
 }
