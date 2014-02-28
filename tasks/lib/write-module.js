@@ -23,12 +23,12 @@ var writeContents = require('./write-contents');
 
 
 module.exports = function writeModule(oFile, fileName, moduleId, debug) {
-    var contents = getContents(fileName, 'utf8')
+    var contents = fs.readFileSync(fileName, 'utf8')
 
     contents = '\n' + stripHeader(contents, fileName) + '\n'
 
     // Windows fix, '\' is an escape, but defining requires '/' -jm
-    if((/privateModule$/.test(moduleId)) || (/workspace$/.test(moduleId)) || (/xapp$/.test(moduleId))){
+    if((/privateModule$/.test(moduleId)) || (/xapp$/.test(moduleId))){
         moduleId = path.join('xFace', moduleId).split("\\").join("/");
     }else if(!/xFace$/.test(moduleId)){
         moduleId = path.join('cordova', moduleId).split("\\").join("/");
@@ -39,21 +39,5 @@ module.exports = function writeModule(oFile, fileName, moduleId, debug) {
     contents = 'define("' + moduleId + '", ' + signature + ' {' + contents + '});\n'
 
     writeContents(oFile, fileName, contents, debug)    
-}
-
-//------------------------------------------------------------------------------
-var symbolinks = [
-    "src/test/androidexec.js",
-    'src/test/iosexec.js'
-];
-
-function getContents(file) {
-    file = file.split("\\").join("/");
-    if (process.platform.slice(0, 3) == 'win' && -1 != symbolinks.indexOf(file)) {
-        linkPath = fs.readFileSync(file, 'utf8')
-        file = require('path').resolve(path.dirname(file), linkPath);
-     }
-
-    return fs.readFileSync(file, 'utf8');
 }
 
