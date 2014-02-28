@@ -111,7 +111,7 @@ function findCordovaPath() {
                     index = path.lastIndexOf('/', index);
                     path = path.substring(0, index) + '/Library/xface3/js_core/';
                 }else if(-1 != path.indexOf('Documents')){
-                    path = path.substring(0, path.indexOf('Library')) + 'Library/xface3/js_core/';
+                    path = path.substring(0, path.indexOf('Documents')) + 'Library/xface3/js_core/';
                 }else if(-1 != path.indexOf('Library')){
                     path = path.substring(0, path.indexOf('Library')) + 'Library/xface3/js_core/';
                 }
