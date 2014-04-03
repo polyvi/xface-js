@@ -22,3 +22,10 @@
  *  CB-5973 blackberry: add support for sync exec
  *  CB-5438 Exclude local symlinks from jshint
  *  fixes CB-5806 [Windows8] Add keepCallback support to proxy
+
+
+## 3.2.0 (Thu Apr 03 2014)
+
+
+ *  [Android][CB-6388]Synchronize cordova:LOAD_URL Bridge fails to return binary data
+ *  [Android]Add message and call received event handler
