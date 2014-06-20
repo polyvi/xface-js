@@ -22,3 +22,10 @@
  *  CB-5973 blackberry: add support for sync exec
  *  CB-5438 Exclude local symlinks from jshint
  *  fixes CB-5806 [Windows8] Add keepCallback support to proxy
+
+
+## 3.3.0 (Fri Jun 20 2014)
+
+
+ *  [Android]修改桥接模式为ONLINE_EVENT(同cordova一致)，以解决input标签在非全屏模式下无法使用的问题
+ *  Set VERSION to 3.4.0-dev (via xsrc)
